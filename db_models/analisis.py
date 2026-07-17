@@ -4,6 +4,7 @@ from datetime import datetime
 
 class Analisis(BaseModel):
     id: str = Field(alias="_id", default=None)
+    clinica_id: str
     muestra_id: str
     tipo_analisis: str # Ej: "Secuenciación WGS", "PCR", "Panel Genético"
     fecha_analisis: datetime = Field(default_factory=datetime.utcnow)
