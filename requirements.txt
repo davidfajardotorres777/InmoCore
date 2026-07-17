@@ -5,3 +5,4 @@ python-dotenv==1.0.1
 pydantic==2.7.1
 faker==25.0.0
 matplotlib==3.8.4
+minio==7.2.7
