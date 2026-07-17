@@ -4,6 +4,7 @@ from datetime import datetime
 
 class Muestra(BaseModel):
     id: str = Field(alias="_id", default=None)
+    clinica_id: str
     paciente_id: str
     tipo_muestra: str # Ej: "Sangre", "Saliva", "Tejido Tumoral"
     fecha_extraccion: datetime
