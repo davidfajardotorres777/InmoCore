@@ -11,6 +11,9 @@ from db_models.muestra import Muestra
 from db_models.analisis import Analisis
 from db_models.clinica import Clinica
 from db_models.alerta import Alerta
+import chromadb
+from chromadb.config import Settings
+import os
 
 class StorageDAO:
     """
@@ -36,6 +39,30 @@ class StorageDAO:
             io.BytesIO(data),
             length=len(data)
         )
+
+class VectorDAO:
+    """
+    Data Access Object para interactuar con ChromaDB (Búsqueda Vectorial/Semántica)
+    """
+    def __init__(self, db_path="./chroma_db"):
+        self.client = chromadb.PersistentClient(path=db_path)
+        self.collection = self.client.get_or_create_collection(name="historiales_medicos")
+        
+    def indexar_historial(self, paciente_id: str, historial: str):
+        if not historial:
+            return
+        self.collection.add(
+            documents=[historial],
+            metadatas=[{"paciente_id": str(paciente_id)}],
+            ids=[str(paciente_id)]
+        )
+        
+    def buscar_similitud(self, query: str, n_results: int = 3):
+        results = self.collection.query(
+            query_texts=[query],
+            n_results=n_results
+        )
+        return results
 
 class AdminDAO:
     """
@@ -101,6 +128,29 @@ class BioTraceDAO:
     def listar_pacientes(self, limit: int = 100):
         pacientes = []
         for p in self.col_pacientes.find({"clinica_id": self.clinica_id}).limit(limit):
+            p["_id"] = str(p["_id"])
+            p["clinica_id"] = str(p["clinica_id"])
+            pacientes.append(Paciente(**p))
+        return pacientes
+
+    def buscar_pacientes_cerca_de(self, lat: float, lon: float, radio_km: float):
+        """
+        Consulta Geoespacial 2dsphere: Busca pacientes de la clinica en un radio determinado.
+        """
+        pipeline = {
+            "clinica_id": self.clinica_id,
+            "ubicacion": {
+                "$nearSphere": {
+                    "$geometry": {
+                        "type": "Point",
+                        "coordinates": [lon, lat] # GeoJSON siempre es [lon, lat]
+                    },
+                    "$maxDistance": radio_km * 1000 # metros
+                }
+            }
+        }
+        pacientes = []
+        for p in self.col_pacientes.find(pipeline):
             p["_id"] = str(p["_id"])
             p["clinica_id"] = str(p["clinica_id"])
             pacientes.append(Paciente(**p))
