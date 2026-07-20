@@ -3,16 +3,16 @@ version: '3.8'
 services:
   mongodb:
     image: mongo:7.0
-    container_name: biotrace-mongo
+    container_name: inmocore-mongo
     ports:
       - "27017:27017"
     volumes:
-      - biotrace_data:/data/db
+      - inmocore_data:/data/db
     restart: unless-stopped
 
   minio:
     image: minio/minio
-    container_name: biotrace-minio
+    container_name: inmocore-minio
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -21,9 +21,9 @@ services:
       MINIO_ROOT_PASSWORD: "password"
     command: server /data --console-address ":9001"
     volumes:
-      - biotrace_minio_data:/data
+      - inmocore_minio_data:/data
     restart: unless-stopped
 
 volumes:
-  biotrace_data:
-  biotrace_minio_data:
+  inmocore_data:
+  inmocore_minio_data:

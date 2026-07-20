@@ -43,7 +43,7 @@ InmoCore no se limita a una sola tecnología. Integra un ecosistema completo:
 ## Estructura del proyecto
 
 ```
-BioTrace/
+InmoCore/
 ├── db_models/
 │   ├── __init__.py     # Re-exporta todos los modelos
 │   ├── agencia.py       # Tenant raíz del sistema
