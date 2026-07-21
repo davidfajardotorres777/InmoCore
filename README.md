@@ -70,40 +70,46 @@ InmoCore/
 - Docker Desktop
 - Git
 
-### 1. Entorno
+### 1. Clonar el repositorio
+```bash
+git clone https://github.com/davidfajardotorres777/InmoCore.git
+cd InmoCore
+```
+
+### 2. Entorno
 ```bash
 python -m venv venv
 # Activar según tu SO (venv\Scripts\activate o source venv/bin/activate)
 pip install -r requirements.txt
 ```
 
-### 2. Variables
+### 3. Variables
 Copiá `.env.example` a `.env`.
 ```bash
 cp .env.example .env
 ```
 
-### 3. Levantar Infraestructura
+### 4. Levantar Infraestructura
 Esto levanta MongoDB y MinIO.
 ```bash
 docker compose up -d
 ```
 Podés acceder a la consola de MinIO en http://localhost:9001 (usuario: `admin`, contraseña: `password`).
 
-### 4. Setup y Seed
+### 5. Setup y Seed
 ```bash
 python setup_db.py
 python seed.py
 ```
 `setup_db.py` crea las colecciones e índices (incluyendo los `2dsphere` y las restricciones de unicidad). `seed.py` genera dos agencias de ejemplo, propiedades con descripciones realistas indexadas en ChromaDB, fotos simuladas en MinIO, clientes y contratos.
 
-### 5. Notebook de demostración
+### 6. Notebook de demostración
 ```bash
 jupyter notebook demo.ipynb
 ```
 Recorre multi-tenancy, alertas, publicación e indexado semántico, búsqueda por similitud, búsqueda geoespacial y el reporte agregado por tipo de propiedad.
 
-### 6. Lanzar Interfaz de Usuario
+### 7. Lanzar Interfaz de Usuario
 ```bash
 python main_ui.py
 ```
