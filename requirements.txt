@@ -8,3 +8,4 @@ matplotlib==3.8.4
 minio==7.2.7
 customtkinter==5.2.2
 chromadb==0.4.24
+numpy<2.0.0
